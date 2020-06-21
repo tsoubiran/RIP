@@ -39,7 +39,7 @@ ipv4.reserved()[ip.index(ipv4.reserved())(
 )]
 ```
 
-The same will work IPv6 address and IPv6 ranges. Simply subsitute ipv4 with ipv6 and change the adress to, eg, "fe80::/10" (``` ripv6r("fe80::/10")```) and host mask (``` rhi(ipv6r("fe80::/10"))==(ipv6("fe80::")|ipv6.hostmask(10))```). And use ip() and ipr() to mix both protocols.
+The same will work IPv6 address and IPv6 ranges. Simply subsitute ipv4 with ipv6 and change the adress to, eg, "fe80::/10" (`ipv6r("fe80::/10")`{:.r}) and host mask (`hi(ipv6r("fe80::/10"))==(ipv6("fe80::")|ipv6.hostmask(10))`{:.r}). And use ip() and ipr() to mix both protocols.
 
 What follows shows how to get (confusing) informations about hosts
 
