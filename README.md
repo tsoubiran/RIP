@@ -10,17 +10,18 @@ The RIP package provides classes and methods to work with IP addresses in R. Bot
 The following code snippet shows how to create IPv4 addresses and ranges in addition to arithmetic, compare and bit manipulation methods usage as well as address lookup :
 
 ``` r
+##
 library(RIP)
-##  lo part of the range
+##  low part of the range
 l <- ipv4("192.168.0.0")
-##  hi part  of the range
+##  high part of the range
 h <- l + (2^16 -1)
 ## range
 pn <-ipv4r(l, h)
 ## build range using CIDR notation
 pn==ipv4r("192.168.0.0/16")
 ## build range using dash notation
-pn==ipv4r("192.168.0.0-255.255")
+pn==ipv4r("192.168.0.0-192.168.255.255")
 ##
 pn==ipv4r( l, l + ( ipv4(1L) %<<% 16L ) - 1)
 ##
@@ -38,7 +39,7 @@ ipv4.reserved()[ip.index(ipv4.reserved())(
 )]
 ```
 
-The same will work IPv6 address and IPv6 ranges. Simply subsitute ipv4 with ipv6 and change the adress to, eg, "fe80::/10". And use ip() and ipr() to mix both protocols.
+The same will work IPv6 address and IPv6 ranges. Simply subsitute ipv4 with ipv6 and change the adress to, eg, "fe80::/10" (``` ripv6r("fe80::/10")```) and host mask (``` rhi(ipv6r("fe80::/10"))==(ipv6("fe80::")|ipv6.hostmask(10))```). And use ip() and ipr() to mix both protocols.
 
 What follows shows how to get (confusing) informations about hosts
 
@@ -55,7 +56,7 @@ ipv4.rir()[ip.match(ipv4(rhost), ipv4.rir())]
 ip.match(ipv4(rhost), ipv4.recovered())
 ## domain name info 
 rdom.whois   <- whois('r-project.org', output=1)
-## "AT"
+## "AT" Österreich, alles klar
 rdom.whois[['r-project.org']]['Registrant Country']
 ## host info
 rhost.whois <- whois(ipv4(rhost),verbose = 2, output=1)
@@ -63,7 +64,7 @@ rhost.whois <- whois(ipv4(rhost),verbose = 2, output=1)
 rhost.whois[['r-project.org']]['Organization']
 ```
 
-The results of those queries may look a little bit confusing. The whois queries tells us that r-project.org site is hosted by the XXX in Austria (and so does the extension of the primary domain --".at") and that its address is accordingly managed by the RIPE-NCC. But RIR lookup on the address of the server tells us that its address falls into a range managed by ARIN which serves North America.  What's happening here is that some address ranges were assigned by ARIN in the 80's to European organizations such as universities before RIPE NCC began its operations in 1992. Those ranges were later transferred to the RIPE NCC as shown by
+The results of those queries may look a little bit confusing. The whois queries tells us that r-project.org site is hosted by the Wirtschaftsuniversität Wien in Austria (and so does the extension of the primary domain  &mdash; ".at") and that its address is accordingly managed by the RIPE-NCC. But RIR lookup on the address of the server tells us that its address falls into a range managed by ARIN which serves North America.  What's happening here is that some address ranges were assigned by ARIN in the 80's to European organizations such as universities before RIPE NCC began its operations in 1992. Those ranges were later transferred to the RIPE NCC as shown by
 
 ``` r
 ## "Early Registrations, Transferred to RIPE NCC"
