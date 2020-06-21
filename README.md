@@ -7,7 +7,7 @@ The RIP package provides classes and methods to work with IP addresses in R. Bot
 
 ## Quick start
 
-The following code snippet shows how to create IPv4 and IPv4 addresses in addition to arithmetic, compare and bit manipulation methods usage as well as address lookup :
+The following code snippet shows how to create IPv4 addresses and ranges in addition to arithmetic, compare and bit manipulation methods usage as well as address lookup :
 
 ``` r
 library(RIP)
@@ -37,6 +37,8 @@ ipv4.reserved()[ip.index(ipv4.reserved())(
   ipv4r("192.168.0.0/24")
 )]
 ```
+
+The same will work IPv6 address and IPv6 ranges. Simply subsitute ipv4 with ipv6 and change the adress to, eg, "fe80::/10". And use ip() and ipr() to mix both protocols.
 
 What follows shows how to get (confusing) informations about hosts
 
