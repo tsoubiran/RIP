@@ -269,17 +269,17 @@ whois <- function(domain, referer=NA, output=1,verbose=0){
     ##
     if( all(is.na(referer)) ){
       ## TLD : tolower(domain)!=tolower(resp0["domain"])
-      fv <- stringr::str_match(resp0 , "^([A-Za-z\\s]+)\\s*:\\s+(.+)$")
-      ##print(fv)
+      kv <- stringr::str_match(resp0 , "^([A-Za-z\\s]+)\\s*:\\s+(.+)$")
+      ##print(kv)
       ##
-      i <- which(tolower(fv[,2])=="domain")
+      i <- which(tolower(kv[,2])=="domain")
       ##
       if( length(i)==0 ){
         warning("missing domain field in whois.iana.org response:\n", resp0)
         return( NA ) 
       }
       ##
-      if( any(tolower(fv[i,3])!=tolower(domain)) ){
+      if( any(tolower(kv[i,3])!=tolower(domain)) ){
         warning("no referer found : ", domain)
         return( NA ) 
       }
@@ -308,14 +308,14 @@ whois <- function(domain, referer=NA, output=1,verbose=0){
     if(!output) return(resp1)
     ##
     ##
-    ##
+    ## rm comments
     resp1 <- resp1[!grepl("^#", resp1)]
+    ## key-val
+    kv <- stringr::str_match(resp1[nchar(resp1)>0] , "^([A-Za-z\\s]+)\\s*:\\s+(.+)$")
+    ## no keys
+    res <- ifelse( is.na(kv[,3]), kv[,1], kv[,3])
     ##
-    fv <- stringr::str_match(resp1[nchar(resp1)>0] , "^([A-Za-z\\s]+)\\s*:\\s+(.+)$")
-    ##
-    res <- ifelse( is.na(fv[,3]), fv[,1], fv[,3])
-    ##
-    names(res) <- fv[,2]
+    names(res) <- kv[,2]
     ##
     res[!is.na(res)]
   }

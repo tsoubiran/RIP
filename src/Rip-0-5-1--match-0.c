@@ -296,12 +296,7 @@ RIP_IPr_BSEARCH_1(v6, v6r, Rippaddr_ipv6_cmp_ipv6r, in, 1 )
   #define RIP_htb_nh RIP_##___group__##_##___IPv__##_htb_nh
  
 RIP_HASH_DEF(cache, IPv4)
-
  
-#define setbit(A,k)     ( A[(k/32)] |= (1 << (k%32)) )
-#define clearbit(A,k)   ( A[(k/32)] &= ~(1 << (k%32)) )            
-#define testbit(A,k)    ( A[(k/32)] & (1 << (k%32)) )
-
 #define K1 RIP_CACHE_NVAL   
 #define K2 7  
  

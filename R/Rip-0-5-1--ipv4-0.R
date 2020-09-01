@@ -1,40 +1,3 @@
-##________________________________________________________________________________________________________________________
-##
-##
-##
-##________________________________________________________________________________________________________________________
-##
-##
-## setOldClass(Classes, prototype, where, test = FALSE, S4Class)
-## .OldClassesList
-## 
-## extends
-## selectSuperClasses
-##
-# selectSuperClasses('IPv4')
-# [1] "vector"
-## 
-## https://stackoverflow.com/questions/12100856/combining-s4-and-s3-methods-in-a-single-function
-##
-# setClass("A")                    # define a class
-
-# f3 <- function(x, ...)           # S3 generic, for S3 dispatch    
-#     UseMethod("f3")
-# setGeneric("f3")                 # S4 generic, for S4 dispatch, default is S3 generic
-# f3.A <- function(x, ...) {}      # S3 method for S4 class
-# setMethod("f3", "A", f3.A)       # S4 method for S4 class
-## 
-## 
-## 
-## NextMethod :
-## Math functions operate on the rounded numbers, return a plain
-## vector.  The next method will always be the default, usually a primitive.
-# setMethod("Math", "rnum",function(x) callNextMethod(round(as.numeric(x), x@d)))
-## 
-## 
-## valueClass
-## 
-##________________________________________________________________________________________________________________________
 
 ##________________________________________________________________________________________________________________________
 ##
@@ -145,6 +108,12 @@ setMethod(
 #   , function(ip,...) ifelse(!is.na(ip@.Data), 4L, NA_integer_)
 # )
 ##________________________________________________________________________________________________________________________
+
+##________________________________________________________________________________________________________________________
+##
+##
+##
+##________________________________________________________________________________________________________________________
 ##
 ##
 ##
@@ -222,7 +191,7 @@ setMethod(
     ))
   }
 )
-##
+## !!! TODO !!!
 # setValidity(
 #   "IPv4"
 #   , function(object){
@@ -261,7 +230,6 @@ setMethod(
   , signature(e1="missing",e2="missing")
   , function(e1,e2,...) new('IPv4r', ...)
 )
-
 ##  
 ##  
 ##
@@ -350,35 +318,6 @@ setMethod(
 ##
 ##
 ##________________________________________________________________________________________________________________________
-## 
-## cf. sort -> order (en fait pbm de def de xtfrm)
-## 
-# getMethod('is.integer')
-# Error in getMethod("is.integer") : aucune fonction générique n'est trouvée pour 'is.integer'
-## 
-## Error in .setupMethodsTables(fdef, initialize = TRUE) : tentative d'obtenir le slot "group" d'un objet d'une classe élémentaire ("NULL") sans slots
-##
-# setGeneric("is.integer") 
-## ‘is.integer’ dispatches internally;  methods can be defined, but the generic function is implicit, and cannot be changed.
-## 
-## setOldClass("is.integer")
-## 
-## 
-## 
-# setMethod(
-#   "is.integer"
-#   ## 
-#   , signature(x = "IPv4")
-#   , function(x) FALSE
-#   ##, where = topenv(parent.frame())
-# )
-## 
-## marche pour IPV4 mais nécessite de redéfinir TOUTES les classes
-## 
-# is.integer <- function(x, ...)           # S3 generic, for S3 dispatch    
-#     UseMethod("is.integer")
-# ##
-# is.integer.IPv4 <- function(x) FALSE
 ##
 ##
 ##
@@ -603,52 +542,6 @@ setMethod(
     ip
   }
 )
-## 
-if(F) setMethod(
-  "["
-  ## 
-  , signature(x = "IPv4", i = "numeric")
-  ##
-  , function(x, i, ...) {  
-    ##
-    idx <- as.integer(i)
-    ##
-    ## idx < 0
-    ##
-    if( (max.idx <- max(idx,na.rm=T))>length(x) ) stop("index out of bounds ", max.idx)
-    ##
-    ip <- new('IPv4')
-    ##
-    ip@.Data <- rep(NA_integer_, length(idx))
-    ##
-    ipv4.idx <- x@.Data[idx] +1L
-    ##
-    ##print(ipv4.idx)
-    ##
-    ##
-    ##
-    if(
-      !all( is.na( ipv4.idx ) )
-    ){     
-      ##
-      if( is.null( x@ipv4 ) ) stop( "NULL ipr")
-      ##
-      if( is.null( x@length ) ) stop( "NULL length")
-      ##
-      ##ip@ipr <- .Call("Ripaddr_IPv4r_subset0", x, ipv4r.idx[which( !is.na(ipv4r.idx) ) ] )
-      ##
-      ip@ipv4 <- x@ipv4[ ipv4.idx[which( !is.na(ipv4.idx) ) ]  ]
-      ##
-      ip.len <- length(ip@ipv4)
-      ##
-      ip@.Data[ which( !is.na( ipv4.idx ) ) ] <- ( 1:ip.len ) - 1L
-      ##
-      ip@length <- ip.len
-    }
-    ##
-    ip
-  }
-)
 ##
 ## fix pour all(value==NA)) dans polelec-apache
 ##
@@ -721,48 +614,6 @@ setMethod(
 #       ##
 #       x@id[i] <- ""
 #     }
-    ##
-    x
-  }
-)
-##
-if(F)setMethod(
-  "[<-"
-  , "IPv4"
-  , function (x, i, j, ..., value){
-    ##
-    if( 
-      ( max1<-max(i,na.rm=T) )>( max2<-max(x@.Data,na.rm=T) )
-    ) stop("index out-of-bounds: ", max1, max2)
-    ##
-    if( class(value)!='IPv4' ) value <- new('IPv4', as.character(value))
-#     show(value)
-#     print(value@.Data)
-#     print(i)
-    ##if(length(i)!=length(value)) error('length mismatch')
-#     print(x@ipv4)
-#     print(x@ipv4[x@.Data+1])
-    ##
-    ## xpd
-    ipv4    <- x@ipv4[x@.Data+1]
-    ipv4[i] <- value@ipv4[value@.Data+1]
-    ##
-    ##x@ipv4  <- ipv4[!is.na(ipv4)]
-    ##
-    x@.Data[i] <- value@.Data
-    ## re-idx
-    nna          <- !is.na(x@.Data)
-    ##
-#     print(idx[nna])
-#     print( ipv4[idx[nna]] )
-    ##
-    x@ipv4       <- ipv4[ nna ]
-    ##
-    idx          <- cumsum(nna) - 1L
-    ##idx          <- idx - 1L
-    x@.Data[nna] <- idx[nna]
-    ##
-    x@length     <- length(x@ipv4)
     ##
     x
   }
@@ -1039,18 +890,6 @@ setMethod(
     x
   }
 )
-## union: IP,IPv4r*,IPv6r*
-# setMethod(
-#   "rbind2"
-#   , signature(x = "IPv4r", y="ANY")
-#   , function(x, y, ...){
-#     ##print('any')
-#     ##
-#     if( missing(y) ) return(x)
-#     ##
-#     callGeneric(x, y)
-#   }
-# )
 ##________________________________________________________________________________________________________________________
 
 ##________________________________________________________________________________________________________________________
@@ -1058,7 +897,6 @@ setMethod(
 ##
 ##
 ##________________________________________________________________________________________________________________________
-##
 ##
 ##
 ##
@@ -1073,7 +911,6 @@ setMethod(
 ##
 ##
 ##
-##
 setMethod(
   "!="
   , signature(e1 = "IPv4", e2 = "IPv4")
@@ -1082,7 +919,6 @@ setMethod(
     .Call("Rip_ipv4_op2_bool_neq_0", e1, e2 )
   }
 )
-##
 ##
 ##
 ##
@@ -1097,7 +933,6 @@ setMethod(
 ##
 ##
 ##
-##
 setMethod(
   "<="
   , signature(e1 = "IPv4", e2 = "IPv4")
@@ -1109,7 +944,6 @@ setMethod(
 ##
 ##
 ##
-##
 setMethod(
   ">"
   , signature(e1 = "IPv4", e2 = "IPv4")
@@ -1118,7 +952,6 @@ setMethod(
     .Call("Rip_ipv4_op2_bool_gt_0", e1, e2 )
   }
 )
-##
 ##
 ##
 ##
@@ -1143,13 +976,24 @@ setMethod(
     .Call("Rip_ipv4r_op2_bool_eq_0", e1, e2 )
   }
 )
-## IPv4r : !=
 ## 
-## intersect
+##
+##
+setMethod(
+  "!="
+  , signature(e1 = "IPv4r", e2 = "IPv4r")
+  ## 
+  , function(e1,e2){
+    .Call("Rip_ipv4r_op2_bool_neq_0", e1, e2 )
+  }
+)
+## 
+## intersection
+## intersects : Ripaddr_ipv4r_cmp_intersects
+##
 ## setdiff,setequal
 ## union
 ## 
-## intersection, intersects
 ## 
 ##________________________________________________________________________________________________________________________
 
@@ -1173,6 +1017,7 @@ setMethod(
     )
   }
 )
+##
 ##
 ##
 setMethod(
@@ -1308,8 +1153,6 @@ setMethod(
 #     (x | y) & !(x & y)
 # }
 ##
-# e1@ipv4[e1@.Data] ^ e2@ipv4[e2@.Data]
-# nna1 <- !is.na(e1@.Data) 
 ##
 ##
 setMethod(
@@ -1382,7 +1225,6 @@ ipv4.hostmask <- function(n){
     ##, new('IPv4')
   )
 }
-
 ##________________________________________________________________________________________________________________________
 
 

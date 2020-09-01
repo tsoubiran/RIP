@@ -1273,58 +1273,11 @@ setMethod(
     res[nna][idx] <- seq.int(sum(nna))
     res[!nna]     <- NA
     res
-    ##
-    ##  -- ??? NaN ??? --
-    ##
-#     xpd <- x@.Data+1L
-#     idx <- order(x@ipv6[xpd,2],x@ipv6[xpd,1], decreasing=F)
-    ##
-#     rv <- rep( NA_integer_, length(x)) ##  integer(length(x)) ## 
-#     rv[idx] <- seq.int(length(x))## 
-#     ## rv[is.na(x)] <- NA
-#     rv
-    ##
   }
 )
-##
-# setMethod(
-#   "xtfrm"
-#   ## 
-#   , "IPv6"
-#   , function(x){
-#     ##
-#      .Call(
-#         "Rip_ipv6_qsort_1"
-#         , x
-#       )+1L
-#   }
-# )
-##
-## 
-## 
-##
-# setMethod(
-#   "xtfrm"
-#   ## 
-#   , "IPv6"
-#   , function(x){
-#     ##order(
-#     ##.Call( 'Rip_ipv6_cvtfl64_0', x)
-#     ##
-#     x.num <- .Call( 'Rip_ipv6_cvtxprecfl64_0', x)
-#     ##order( x.num[,1], x.num[,2])
-#     ##do.call('order', list( x.num[,1], x.num[,2]) )
-#     ##
-#      match( 
-#       1:length(x)
-#       , order( x.num[,1], x.num[,2])
-#     )
-#     ##)
-#   }
-# )
 ##________________________________________________________________________________________________________________________
 ##
-## FIXME
+## !!! FIXME !!!
 ## 
 ##
 setMethod(
@@ -1342,17 +1295,7 @@ setMethod(
      ##
      ip6.hi <- .Call( 'Rip_ipv6_cvtxprecfl64_0', ip6[[2]])
      ##
-#      cbind(ip6.lo, ip6.hi )
-     ##
-     (
-       ##order( ip6.lo[,1], ip6.lo[,2], ip6.hi[,1], ip6.hi[,2]) 
-       ##
-       match( 
-        1:length(x)
-        , order( ip6.lo[,1], ip6.lo[,2], ip6.hi[,1], ip6.hi[,2]) 
-      )
-     )
-     ##)
+     cbind( ip6.lo[,1], ip6.lo[,2], ip6.hi[,1], ip6.hi[,2]) 
   }
 )
 ##________________________________________________________________________________________________________________________
