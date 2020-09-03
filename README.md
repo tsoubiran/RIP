@@ -1,4 +1,4 @@
-The RIP package provides classes and methods to work with IP addresses in R. Both IPv4 and IPv6 are supported as well as arbitrary IP ranges. It is based on the [ip4r](https://github.com/RhodiumToad/ip4r) PostgreSQL extension. The RIP package defines vectors-like objects that provides for
+The RIP package provides vectorized classes and methods to work with IP addresses in R. Both IPv4 and IPv6 are supported as well as arbitrary IP ranges. It is based on the [ip4r](https://github.com/RhodiumToad/ip4r) PostgreSQL extension. The RIP package defines vectors-like objects that provides for
 
  - IP addresses and range parsing and validation
  - vectorized operations such as arithmetic, logical and bitwise operations
@@ -22,9 +22,9 @@ pn <-ipv4r(l, h)
 pn==ipv4r("192.168.0.0/16")
 ## build range using dash notation
 pn==ipv4r("192.168.0.0-192.168.255.255")
-## build h from l with the appropriate mask
+## build h from l with the appropriate mask using bitwise OR
 pn==ipv4r( l, l | ipv4.hostmask( ceiling(log2(ip.range(pn))) ) )
-## same thing using bitwise and arith operators
+## same thing as l + (2^16 -1) using left shift bitwise operator
 pn==ipv4r( l, l + ( ipv4(1L) %<<% 16L ) - 1)
 ##
 ## IP lookup
@@ -39,9 +39,9 @@ ipv4.reserved()[ip.index(ipv4.reserved())(
 )]
 ```
 
-The same will work IPv6 address and IPv6 ranges. Simply subsitute ipv4 with ipv6 and change the adress to, eg, "fe80::/10" (`ipv6r("fe80::/10")`) and host mask (`hi(ipv6r("fe80::/10"))==(ipv6("fe80::")|ipv6.hostmask(10))`). Also use `ip()` and `ipr()` to mix both protocols.
+The same will work IPv6 address and IPv6 ranges. Simply substitute ipv4 with ipv6 and change the address to, eg, "fe80::/10" (`ipv6r("fe80::/10")`) and host mask (`hi(ipv6r("fe80::/10"))==(ipv6("fe80::")|ipv6.hostmask(10))`). Also use `ip()` and `ipr()` to mix both protocols.
 
-What follows shows how to get (confusing) informations about hosts
+What follows shows how to get (confusing) informations about hosts (note : the host() as well as the host.info() and localhost.ip() functions only work for POSIX compliant OS at moment which is a fancy way to say that it won't work with Windows)
 
 ``` r
 ## DNS lookup
