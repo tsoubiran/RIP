@@ -407,7 +407,7 @@ unique.IPv4 <- function(
   ##
   htb.sz  <- as.integer(length(x)*1.5)+1L
   ##
-  idx <- .Call("Rip_h_ipv6_h128dblh_lemire_hash_0_0", x, c(htb.sz = htb.sz, M2 = 7L))
+  idx <- .Call("Rip_h_ipv4_hash_0_0", x, c(htb.sz = htb.sz, M2 = 7L))
   ##
   x[idx]
 }
