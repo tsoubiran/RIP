@@ -561,23 +561,28 @@ setMethod(
     ##
     if (all(v.na==T)){
       x@.Data[i] <- NA
-      x@length   <- 0L
     }else{
+      ## grow matrix if necesary
+      if( 
+        ( d <- max(i) - length(ipv4) )>0
+      ){
+        ipv4 <- c(ipv4, rep(NA_integer_, length(ipv4)+d, ncol=2))
+      }
       ##
       ipv4[i] <- value@ipv4[value@.Data+1]
       ##
       x@.Data[i] <- value@.Data
-      ## re-idx
-      nna          <- !is.na(x@.Data)
-      ##
-      x@ipv4       <- ipv4[ nna ]
-      ##
-      idx          <- cumsum(nna) - 1L
-      ##
-      x@.Data[nna] <- idx[nna]
-      ##
-      x@length     <- length(x@ipv4)
     }
+    ## re-idx
+    nna          <- !is.na(x@.Data)
+    ##
+    x@ipv4       <- ipv4[ nna ]
+    ##
+    idx          <- cumsum(nna) - 1L
+    ##
+    x@.Data[nna] <- idx[nna]
+    ##
+    x@length     <- length(x@ipv4)
     ##
     ## !!!
     ## replace_setId
@@ -750,7 +755,7 @@ setMethod(
     x@length     <- nrow(x@ipr)
     ##
     ##
-    x <- replace_setId(x,i,value)
+    x <- IP_setId_replace(x,i,value)
     ##
     x
   }

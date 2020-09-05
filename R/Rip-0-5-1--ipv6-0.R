@@ -551,22 +551,16 @@ setMethod(
   , "IPv6"
   , function (x, i, j, ..., value){
     ##
-    if( class(value)!='IPv6' ) value <- ipv6(value) ## new('IPv6', as.character(value))
-    ## xpd
-#     ipv6     <- if( !is.null(x@ipv6) ) matrix(x@ipv6, ncol=2)[(x@.Data+1),] else NULL
+    if( class(value)!='IPv6' ) value <- ipv6(value) ## 
     ##
-    ##print(ipv6)
+    ipv6 <- matrix(x@ipv6, ncol=2)[(x@.Data+1),]
     ##
     v.na <- is.na(value)
     ##
     if (all(v.na==T)){
-      ##
       x@.Data[i] <- NA
-      x@length <- 0L
     }else{
-      ##
-      ipv6 <- matrix(x@ipv6, ncol=2)[(x@.Data+1),]
-      ## xpd
+      ## grow matrix if necesary
       if( 
         ( d <- max(i) - nrow(ipv6) )>0
       ){
@@ -574,27 +568,19 @@ setMethod(
       }
       ## replace
       ##
-      ipv6[i,] <- as.matrix(value@ipv6, ncol=4)[value@.Data+1,]
-      ##ipv6[(i),] <- (matrix(value@ipv6, ncol=2))[value@.Data+1,]
-      ##
-#       print(ipv6)
-      ## rm NA : x@ipv6   <- ipv6[!is.na(ipv6[,1]) | is.nan( ipv6[,1] ),]
-      ##print(matrix(x@ipv6, ncol=2))
-      ##
-      ##
+      ipv6[i,] <- as.matrix(value@ipv6, ncol=2)[value@.Data+1,]
       ## cp
       x@.Data[i]   <- value@.Data
-#     }
-      ## re-idx
-      nna          <- !is.na(x@.Data)
-      ## rm NA
-      x@ipv6       <- matrix(ipv6[which(nna),],ncol=2)
-      ##
-      idx          <- cumsum(nna) - 1L
-      x@.Data[nna] <- idx[nna]
-      ##
-      x@length <- nrow(x@ipv6)
     }
+    ## re-idx
+    nna          <- !is.na(x@.Data)
+    ## rm NA
+    x@ipv6       <- matrix(ipv6[which(nna),],ncol=2)
+    ##
+    idx          <- cumsum(nna) - 1L
+    x@.Data[nna] <- idx[nna]
+    ##
+    x@length <- nrow(x@ipv6)
     ##
     ## replace_setId
     ##
@@ -696,16 +682,14 @@ setMethod(
 #     }
     ##ip@ipr <-  matrix(x@ipr[ (ip@.Data[nna]+1L) ,])
     ##
-    ip@ipr <- matrix(x@ipr[ (ip@.Data[nna]+1L) ,],ncol=4)
+    ip@ipr        <- matrix(x@ipr[ (ip@.Data[nna]+1L) ,],ncol=4)
     ## re-idx
     idx           <- cumsum(nna) - 1L
     ip@.Data[nna] <- idx[nna]
     ##
-    ##print(ip@.Data)
+    ip@length     <- nrow(ip@ipr)
     ##
     if( !is.null(x@id) ) ip@id <- x@id[i]
-    ##
-    ip@length     <- nrow(ip@ipr)
     ##
     ip
   }
@@ -738,9 +722,6 @@ setMethod(
       }
       ##
       ipr[i,] <- as.matrix(value@ipr, ncol=4)[value@.Data+1,]
-      ## rm NA
-#       x@ipr   <- ipr[!is.na(ipr[,1]),]
-      ##print(matrix(x@ipv6, ncol=2))
       ## cp
       x@.Data[i]   <- value@.Data
     }
