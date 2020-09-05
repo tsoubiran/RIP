@@ -860,7 +860,7 @@ setMethod(
     x
   }
 )
-##
+## 
 # rbind.IPr <- function(..., deparse.level = 1, make.row.names = TRUE, stringsAsFactors = default.stringsAsFactors()){
 #   ##
 #   cat("s3:rbind\n")
@@ -926,7 +926,6 @@ setMethod(
   , "IP"
   , function(object){
      ##.Call("Rip_ip_as_character_0",object)
-     ##print(as.character(object))
      ##
      print(object)
      invisible()

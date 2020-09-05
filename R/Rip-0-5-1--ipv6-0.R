@@ -331,6 +331,7 @@ setMethod(
   , function(object){
     ##
     print(object)
+    ##
     invisible()
   }
 )
@@ -375,14 +376,12 @@ setMethod(
 unique.IPv6 <- function(
   x,...
 ){
-  ##new('IPv6', unique(.Call("Rip_ipv6_as_character_0", x),...))
   ##
   htb.sz  <- as.integer(length(x)*1.5)+1L
   ##
   idx <- .Call("Rip_h_ipv6_h128dblh_lemire_hash_0_0", x, c(htb.sz = htb.sz, M2 = 7L))
   ##
   x[idx]
-
 }
 ##
 ##
@@ -424,8 +423,9 @@ setMethod(
   , function(x,...){
       ##
       ip.strings <- .Call("Rip_ipv6r_as_character_0",x)
-      ##names(ip.strings) <- names(x)
+      ##
       print(ip.strings)
+      ##
       x
   }
 )
@@ -436,13 +436,11 @@ setMethod(
   , function(object){
     ##
     print(object)
+    ##
     invisible()
   }
 )
 ##
-## 
-#   , trim = FALSE, digits = NULL, nsmall =0L, justify = c("left","right", "centre", "none"), width = NULL, na.encode = TRUE,scientific = NA, big.mark = "", big.interval = 3L
-#   , small.mark = "", small.interval = 5L, decimal.mark = ".", zero.print = NULL, drop0trailing = FALSE
 ##
 ##
 format.IPv6r <- function(x
@@ -608,48 +606,6 @@ setMethod(
 ##
 ##
 ##
-if(F)setMethod(
-  "[<-"
-  , "IPv6"
-  , function (x, i, j, ..., value){
-    ##
-    if( class(value)!='IPv6' ) value <- new('IPv6', as.character(value))
-#     show(value)
-#     print(value@.Data)
-#     print(i)
-    ##if(length(i)!=length(value)) error('length mismatch')
-    ## xpd
-    ##
-#     print(x@ipv6)
-#     print(matrix(x@ipv6, ncol=2))
-    ## xpd
-    ipv6     <- matrix(x@ipv6, ncol=2)[print(x@.Data+1),]
-    ##print(ipv6)
-    ## replace
-    ipv6[(i),] <- print(matrix(value@ipv6, ncol=2))[value@.Data+1,]
-    ##print(ipv6)
-    ## rm NA : x@ipv6   <- ipv6[!is.na(ipv6[,1]) | is.nan( ipv6[,1] ),]
-    ##print(matrix(x@ipv6, ncol=2))
-    ##
-    ##
-    ## cp
-    x@.Data[i]   <- value@.Data
-    ## re-idx
-    nna          <- !is.na(x@.Data)
-    ## rm NA
-    x@ipv6       <- ipv6[nna,]
-    ##
-    idx          <- cumsum(nna) - 1L
-    x@.Data[nna] <- idx[nna]
-    ##
-    x@length <- nrow(x@ipv6)
-    ##
-    x
-  }
-)
-##
-##
-##
 `c.IPv6` <- function(...) IP_concat(...)
 ##
 `c.IPv6r` <- function(...) IP_concat(...)
@@ -798,31 +754,18 @@ setMethod(
     ##
     x@length     <- nrow(x@ipr)
     ##
-    ##
     x <- IP_setId_replace(x,i,value)
-    ##
-#     if( !is.null(value@id) ){
-#       ##
-#       if( is.null(x@id) ) x@id <- rep(NA_character_, length(x@.Data))
-#       ##
-#       x@id[i] <- value@id[i]
-      
-#     }else if( !is.null(x@id) ){
-#       ##
-#       x@id[i] <- NA_character_
-#     }
     ##
     x
   }
 )
 ##
-## rbind2
+## 
 ##
 setMethod(
   "rbind2"
   , signature(x = "IPv6r", y="IPv6r")
   , function(x, y, ...){
-    ##cat("rbind2\n")
     ##
     x@.Data  <- c( x@.Data, y@.Data+nrow( x@ipr ) )
     ##
@@ -1206,22 +1149,6 @@ ipv6.hostmask <- function(n){
 ##
 ##
 ##
-# ipv6.order <- function(x,...){
-#   ##if(is.null(ipv6)) return(rep(NA,length(x)))
-#   ##
-#   x.nona <- x[!(naidx <- is.na(x))]
-#   ##
-#   idx <- .Call(
-#     "" ## "Rip_ipv6_qsort_1"
-#     , x.nona
-#   )+1L
-#   ##
-#   ## !!!NA!!!
-#   ##
-#   idx <- c(idx, which(naidx))
-#   ##
-#   idx
-# }
 ## 
 ## 
 ##
@@ -1277,7 +1204,7 @@ setMethod(
 )
 ##________________________________________________________________________________________________________________________
 ##
-## !!! FIXME !!!
+## !!! TODO check
 ## 
 ##
 setMethod(
@@ -1286,16 +1213,14 @@ setMethod(
   , "IPv6r"
   , function(x){
     ##
-     ##order(
-     ##.Call( 'Rip_ipv6_cvtfl64_0', x)
-     ##
-     ip6 <- ipv6(x)
-     ##
-     ip6.lo <- .Call( 'Rip_ipv6_cvtxprecfl64_0', ip6[[1]])
-     ##
-     ip6.hi <- .Call( 'Rip_ipv6_cvtxprecfl64_0', ip6[[2]])
-     ##
-     cbind( ip6.lo[,1], ip6.lo[,2], ip6.hi[,1], ip6.hi[,2]) 
+    idx <- order( x@ipr[,1], x@ipr[,2], x@ipr[,3], x@ipr[,4]) 
+    ##
+    nna           <- !is.na(x)
+    res           <- integer(length(x))
+    res[nna][idx] <- seq.int(sum(nna))
+    res[!nna]     <- NA
+    ##
+    res
   }
 )
 ##________________________________________________________________________________________________________________________
@@ -1370,12 +1295,6 @@ setMethod(
           , nomatch
         )+1
       else stop('bsearch not unimplemented for object of class', kl )
-#       ##
-#       res <- naidx
-#       ##
-#       res[!naidx] <- midx
-#       ##
-#       res
       ##
       midx
     }
@@ -1434,7 +1353,7 @@ setMethod(
   }
 )
 ##
-## TODO : hash256
+## !!!TODO : hash256
 ##
 setMethod(
   "ip.match"

@@ -272,6 +272,7 @@ setMethod(
     , IPv6  = ipv6()
     , IPv6r = ipv6r()
     , IP    = ip()
+    ## IPr
   )
   ##
   nna  <- unlist(lapply(x,function(x) if(length(x)>0) !is.na(x) else NULL))

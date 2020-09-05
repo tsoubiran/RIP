@@ -403,11 +403,10 @@ setMethod(
 unique.IPv4 <- function(
   x,...
 ){
-  ##new('IPv4', unique(.Call("Rip_ipv4_as_character_0", x)) )
   ##
   htb.sz  <- as.integer(length(x)*1.5)+1L
   ##
-  idx <- .Call("Rip_h_ipv4_hash_0_0", x, c(htb.sz = htb.sz, M2 = 7L))
+  idx <- .Call("Rip_h_ipv4_hash_0_0", x, c(htb.sz = htb.sz, M1 = htb.sz, M2 = 7L))
   ##
   x[idx]
 }
@@ -447,8 +446,9 @@ setMethod(
   , function(x,...){
       ##
       ip.strings <- .Call("Rip_ipv4r_as_character_0",x)
-      ##names(ip.strings) <- names(x)
+      ##
       print(ip.strings)
+      ##
       x
   }
 )
@@ -459,6 +459,7 @@ setMethod(
   , function(object){
     ##
     print(object)
+    ##
     invisible()
   }
 )
@@ -543,7 +544,7 @@ setMethod(
   }
 )
 ##
-## fix pour all(value==NA)) dans polelec-apache
+## !!!fix pour all(value==NA)) dans polelec-apache
 ##
 ## !!!idx<=0
 ##
@@ -552,25 +553,7 @@ setMethod(
   , "IPv4"
   , function (x, i, j, ..., value){
     ##
-#     if( 
-#       ( max1<-max(i,na.rm=T) )>( max2<-max(x@.Data+1L,na.rm=T) )
-#     ) stop("index out-of-bounds: ", max1, max2)
-    ##
-    # print(i)
-    # ##
-    # print(str(value))
-    # print(value)
-    # ##
-    # print(x[i])
-    ##
-    ##
-    if( class(value)!='IPv4' ) value <- ipv4(value) ## new('IPv4', as.character(value))
-    #     show(value)
-    #     print(value@.Data)
-    #     print(i)
-    ##if(length(i)!=length(value)) error('length mismatch')
-    #     print(x@ipv4)
-    #     print(x@ipv4[x@.Data+1])
+    if( class(value)!='IPv4' ) value <- ipv4(value) ## 
     ## xpd
     ipv4    <- x@ipv4[x@.Data+1]
     ##
@@ -584,17 +567,13 @@ setMethod(
       ipv4[i] <- value@ipv4[value@.Data+1]
       ##
       x@.Data[i] <- value@.Data
-#     }
       ## re-idx
       nna          <- !is.na(x@.Data)
-      ##
-      #     print(idx[nna])
-      #     print( ipv4[idx[nna]] )
       ##
       x@ipv4       <- ipv4[ nna ]
       ##
       idx          <- cumsum(nna) - 1L
-      ##idx          <- idx - 1L
+      ##
       x@.Data[nna] <- idx[nna]
       ##
       x@length     <- length(x@ipv4)
@@ -603,17 +582,6 @@ setMethod(
     ## !!!
     ## replace_setId
     x <- IP_setId_replace(x,i,value)
-    ##
-#     if( !is.null(value@id) ){
-#       ##
-#       if( is.null(x@id) ) x@id <- rep("", length(x@.Data))
-#       ##
-#       x@id[i] <- value@id[i]
-      
-#     }else if( !is.null(x@id) ){
-#       ##
-#       x@id[i] <- ""
-#     }
     ##
     x
   }
@@ -691,10 +659,9 @@ setMethod(
       ]
       , ip@.Data[
         which( nna )
-      ]+ x@length ##print( x@length )
+      ]+ x@length ##
     )+1
-    ## print(idx)
-    ## print
+    ## 
     ip@ipr <- matrix(
       x@ipr[idx]
       , ncol=2
@@ -1147,11 +1114,6 @@ setMethod(
     x
   }
 )
-## xor :
-# function (x, y) 
-# {
-#     (x | y) & !(x & y)
-# }
 ##
 ##
 ##
@@ -1222,7 +1184,6 @@ ipv4.hostmask <- function(n){
   .Call(
     "Rip_ipv4_mask_hostmask_0"
     , n
-    ##, new('IPv4')
   )
 }
 ##________________________________________________________________________________________________________________________
@@ -1283,7 +1244,7 @@ setMethod(
   }
 )
 ## 
-## TODO
+## !!!TODO
 ##
 # setMethod(
 #   "ip.order"
@@ -1387,9 +1348,9 @@ setMethod(
       ##
       ## "polymorphisme"
       ##
-      x.clnm <- if( ( kl <-class(x)) %in% c('IPv4', 'IPv4r' ) )
+      x.clnm <- if( ( kl <-class(x)) %in% c('IPv4', 'IPv4r' ) ){
         tolower(kl)
-      else stop('bsearch not implemented for object of class ', kl , ' and table ', class(table))
+      }else stop('bsearch not implemented for object of class ', kl , ' and table ', class(table))
       ##
       midx <- .Call(
           ## "dispatch"
@@ -1400,12 +1361,6 @@ setMethod(
           , idx
           , nomatch
       )+1L
-      ##
-#       res <- naidx
-#       ##
-#       res[!naidx] <- midx
-#       ##
-#       res
       ##
       if( value ) return(table[midx])
       ##

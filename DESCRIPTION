@@ -1,13 +1,12 @@
-Package: RIP
+Package: RIPad
 Type: Package
-Title: IP addresses management 
+Title: IP Addresses Management 
 Version: 0.5.1
 Date: 2020-06-03
 Author: Thomas Soubiran
 Maintainer: Thomas Soubiran <thomas.soubiran@univ-lille.fr>
-Description: provides IPv4 and IPv6 support for IP operations such as comparison, arithmetic, bit manipulation and lookup. Both IPv4 and IPv6 ranges are also supported.
+Description: Provides IPv4 and IPv6 support for IP operations such as comparison, arithmetic, bit manipulation and lookup. Both IPv4 and IPv6 ranges are also supported.
 License: GPL (>= 2)
 Depends: methods
-ByteCompile : yes
 Imports: stringr
 Encoding: UTF-8
