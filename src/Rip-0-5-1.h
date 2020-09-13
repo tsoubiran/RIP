@@ -2,10 +2,7 @@
  
 #ifndef RIP_0_H
 #define RIP_0_H
- 
- 
-#include <fpu_control.h>
- 
+
 #include <math.h>
  
 #include <float.h>
