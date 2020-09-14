@@ -84,7 +84,10 @@ setMethod(
       ip4@ipv4   <- object[nna]
       ip4@.Data  <- ifelse( nna, cumsum(nna) -1L, NA )
       ip4@length <- sum(nna)
-    }else ip4@.Data <- object
+    }else{
+      ip4@.Data <- object
+      ip4@length <- 0L
+    }
     ##
     if( !is.null(nm<-names(object)) ) ip4@id <- nm
     ##
@@ -525,20 +528,25 @@ setMethod(
     ##
     ip@.Data <- x@.Data[i]
     ##
-    nna <- !is.na(ip@.Data)
-    ## print
-    ip@ipv4 <- x@ipv4[ 
-      (ip@.Data[
-        which( nna )
-      ]+1)
-    ] 
-    ## re-idx
-    idx           <- cumsum(nna) - 1L
-    ip@.Data[nna] <- idx[nna]
+    if( !all( is.na(ip@.Data) ) ){
+      ##
+      nna <- !is.na(ip@.Data)
+      ## print
+      ip@ipv4 <- x@ipv4[ 
+        (ip@.Data[
+          which( nna )
+        ]+1)
+      ] 
+      ## re-idx
+      idx           <- cumsum(nna) - 1L
+      ip@.Data[nna] <- idx[nna]
+      ##
+      ip@length <-length(ip@ipv4)
+    }else{
+      ip@length <- 0L
+    }
     ##
     if( !is.null(x@id) ) ip@id <- x@id[i]
-    ##
-    ip@length <-length(ip@ipv4)
     ##
     ip
   }
@@ -656,6 +664,8 @@ setMethod(
     ##
     ip@.Data <- x@.Data[i]
     ##
+    if( !all( is.na(ip@.Data) ) ){
+    ##
     nna <- !is.na(ip@.Data)
     ##
     idx <-c(
@@ -690,9 +700,12 @@ setMethod(
     idx           <- cumsum(nna) - 1L
     ip@.Data[nna] <- idx[nna]
     ##
-    if( !is.null(x@id) ) ip@id <- x@id[i]
-    ##
     ip@length <-nrow(ip@ipr)
+    }else{
+      ip@length <- 0L
+    }
+    ##
+    if( !is.null(x@id) ) ip@id <- x@id[i]
     ##
     ip
   }

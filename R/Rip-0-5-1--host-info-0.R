@@ -67,11 +67,11 @@ setMethod(
     hip <- sapply(
       x@.Data
       , function(i){
-        ##
+        ## !NA
         lo <- x@ipv4.hptr[c(i)]
         hi <- x@ipv4.hptr[c(i+1)]
         ip4 <- if( lo!=hi) paste( as.character( x@ipv4[ (lo+1):hi ] ) , collapse = ",") else ""
-        ##
+        ## !NA
         lo <- x@ipv6.hptr[c(i)]
         hi <- x@ipv6.hptr[c(i+1)]
         ip6 <- if( lo!=hi) paste( as.character( x@ipv6[ (lo+1):hi ] ) , collapse = ",")  else ""
@@ -92,6 +92,18 @@ setMethod(
   , "host"
   , function(object) print(as.character(object))
 )
+##
+format.host <- function(x
+  , trim = FALSE, digits = NULL, nsmall =0L, justify = c("left","right", "centre", "none"), width = NULL, na.encode = TRUE,scientific = NA, big.mark = "", big.interval = 3L
+  , small.mark = "", small.interval = 5L, decimal.mark = ".", zero.print = NULL, drop0trailing = FALSE
+  , ...) as.character(x,...)
+##
+toString.host <- function(x,...){
+  ##
+  as.character(x)
+} 
+##
+names.host <- function(x) x@hostname
 ##____________________________________________________________________________________________________________
 ##
 ##

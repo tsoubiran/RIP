@@ -516,27 +516,32 @@ setMethod(
     ##
     ip@.Data <- x@.Data[i]
     ##
-    nna      <- !is.na(ip@.Data)
-    ##
-    idx <-c(
-      ip@.Data[
-        which( nna )
-      ]
-      , ip@.Data[
-        which( nna )
-      ] + x@length 
-    )+1
-    ## print(idx)
-    ## 
-    ip@ipv6 <- matrix(
-      x@ipv6[idx]
-      , ncol=2
-    )
-    ## re-idx
-    idx           <- cumsum(nna) - 1L
-    ip@.Data[nna] <- idx[nna]
-    ##
-    ip@length     <-nrow(ip@ipv6)
+    if( !all( is.na(ip@.Data) ) ){
+      ##
+      nna      <- !is.na(ip@.Data)
+      ##
+      idx <-c(
+        ip@.Data[
+          which( nna )
+        ]
+        , ip@.Data[
+          which( nna )
+        ] + x@length 
+      )+1
+      ## print(idx)
+      ## 
+      ip@ipv6 <- matrix(
+        x@ipv6[idx]
+        , ncol=2
+      )
+      ## re-idx
+      idx           <- cumsum(nna) - 1L
+      ip@.Data[nna] <- idx[nna]
+      ##
+      ip@length     <-nrow(ip@ipv6)
+    }else{
+      ip@length <- 0L
+    }
     ##
     if( !is.null(x@id) ) ip@id <- x@id[i]
     ##
@@ -653,6 +658,8 @@ setMethod(
     ##
     ip@.Data <- x@.Data[i]
     ##
+    if( !all( is.na(ip@.Data) ) ){
+    ##
     nna      <- !is.na(ip@.Data)
     ##
 #     idx <-c(
@@ -688,6 +695,9 @@ setMethod(
     ip@.Data[nna] <- idx[nna]
     ##
     ip@length     <- nrow(ip@ipr)
+    }else{
+      ip@length <- 0L
+    }
     ##
     if( !is.null(x@id) ) ip@id <- x@id[i]
     ##
