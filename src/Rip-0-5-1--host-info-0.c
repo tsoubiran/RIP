@@ -21,7 +21,7 @@
 
 SEXP Rip_ipv4_gethostbyaddr_0(SEXP Rip ){ 
  
-#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
+#if defined (__unix__) || (defined (__APPLE__)  )
   int i, nip=0, nprotected=0; 
     
   
@@ -68,14 +68,16 @@ SEXP Rip_ipv4_gethostbyaddr_0(SEXP Rip ){
   UNPROTECT( nprotected ); 
   return Res; 
 #else
-  error("unavailable " __func__ " function");
+  char errmsg[256];
+  sprintf(errmsg, "unavailable '%s' function at line %d in file '%s'.", __func__, __LINE__, __FILE__);
+  error(errmsg);
   return ScalarLogical(0);
 #endif
 } 
 
 SEXP Rip_ipv6_gethostbyaddr_0(SEXP Rip ){ 
  
-#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
+#if defined (__unix__) || (defined (__APPLE__) )
   int i, nip=0, nprotected=0; 
   RIPv6_SLOTS_GET( Rip ) 
   nip = Rip_nip; 
@@ -125,14 +127,16 @@ SEXP Rip_ipv6_gethostbyaddr_0(SEXP Rip ){
   UNPROTECT( nprotected ); 
   return Res; 
 #else
-  error("unavailable " __func__ " function");
+  char errmsg[256];
+  sprintf(errmsg, "unavailable '%s' function at line %d in file '%s'.", __func__, __LINE__, __FILE__);
+  error(errmsg);
   return ScalarLogical(0);
 #endif
 } 
 
 SEXP Rip_getaddrinfo_0(SEXP Rhostnames ){ 
  
-#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
+#if defined (__unix__) || (defined (__APPLE__) )
    
   int i,j, nhosts 
     , nprotected=0
@@ -350,7 +354,9 @@ Rprintf("      %" PRIu64 " %" PRIu64 "\n"
    
   return Rhost;
 #else
-  error("unavailable " __func__ " function");
+  char errmsg[256];
+  sprintf(errmsg, "unavailable '%s' function at line %d in file '%s'.", __func__, __LINE__, __FILE__);
+  error(errmsg);
   return ScalarLogical(0);
 #endif
 }
@@ -359,7 +365,7 @@ Rprintf("      %" PRIu64 " %" PRIu64 "\n"
  
 SEXP Rip_ifaddrs_0(){ 
  
-#if defined (__unix__) 
+#if defined (__unix__) || (defined (__APPLE__)  )
      
     struct ifaddrs * ifAddrStruct=NULL;
     struct ifaddrs * ifa=NULL;
@@ -495,7 +501,9 @@ SEXP Rip_ifaddrs_0(){
    
   return Rip;
 #else
-  error("unavailable " __func__ " function");
+  char errmsg[256];
+  sprintf(errmsg, "unavailable '%s' function at line %d in file '%s'.", __func__, __LINE__, __FILE__);
+  error(errmsg);
   return ScalarLogical(0);
 #endif
 }
