@@ -74,7 +74,7 @@
 #define RIP_END 
 
 #define RIP_IP_INPUT(___IPv__, ___R_t__,  ___group__, ___fname__, ___fn__) \
-SEXP Rip_ip##___IPv__#### ___group__####___fname__##_0( \
+SEXP Rip_ip##___IPv__## ___group__##___fname__##_0( \
    SEXP Rvec  \
 ){ \
   SEXP Rip; \

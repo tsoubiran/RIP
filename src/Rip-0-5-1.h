@@ -7,8 +7,6 @@
  
 #include <float.h>
  
-#include <immintrin.h>
- 
 #include <inttypes.h>
  
 #include <ctype.h>

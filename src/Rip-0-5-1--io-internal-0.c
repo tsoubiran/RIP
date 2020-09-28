@@ -311,7 +311,7 @@ int
             buf[pos] = 0;
              
             if(
-                ( pos==3 )  
+              pos==3  
             ){
                 int valid = sscanf(buf,"%u",&ip);
                  

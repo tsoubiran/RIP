@@ -312,7 +312,7 @@ int
   Rippaddr_ipv6_add_float64(
     uint64_t *ipv6, double addend, uint64_t *res
 ){
-  if( fabsf(addend>9223372036854775807.) ) return 0;
+  if( fabs(addend)>9223372036854775807. ) return 0;
   return Rippaddr_ipv6_add_int64( ipv6, (int64_t) addend, res);
 }
  
@@ -396,7 +396,7 @@ int
   Rippaddr_ipv6_sub_float64(
     uint64_t *ipv6, double addend, uint64_t *res
 ){
-  if( fabsf(addend>9223372036854775807.) ) return 0;
+  if( fabs(addend)>9223372036854775807. ) return 0;
   return Rippaddr_ipv6_sub_int64( ipv6, (int64_t) addend, res);
 }
  
